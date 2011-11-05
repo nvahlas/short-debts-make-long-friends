@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 
 from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource, AuthenticationView
-from app.views import IndexView, LoginView, EventsView, CalculatorView
+from app.views import IndexView, LoginView, EventsView, CalculatorView, BalanceView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -35,4 +35,5 @@ urlpatterns = patterns('',
     url(r'^$',                                   login_required( IndexView.as_view() )),
     url(r'^login$',                              LoginView.as_view()),
     url(r'^events$',                             login_required( EventsView.as_view() )),
+    url(r'^balance$',                            login_required( BalanceView.as_view() )),
 )

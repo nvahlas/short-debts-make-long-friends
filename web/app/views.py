@@ -17,6 +17,9 @@ class LoginView(TemplateView):
 
 class EventsView(TemplateView):
     template_name = "events.html"
+    
+class BalanceView(TemplateView):
+    template_name = "balance.html"
 
 class CalculatorView(View):
 
