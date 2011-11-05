@@ -13,8 +13,20 @@
     <link rel="stylesheet" type="text/css" href="static/css/ui-darkness/jquery-ui-1.8.16.custom.css" />
     
     <script type="text/javascript">
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+    
+    
         $(function() {
-            $('#dialog').dialog({
+           $('#dialog').dialog({
                 draggable: false, 
                 resizable: false, 
                 width: '50%',
@@ -23,14 +35,16 @@
                         var username = $('#email').val();
                         var password = $('#password').val();
                         
-                        $.post(
-                            '/authenticate',
-                            $.toJSON({'username':username, 'password':password}),
-                            'json',
-                            function() {
-                                alert('done');
+                        $.ajax({
+                            url: '/authenticate',
+                            type: 'POST',
+                            data: $.toJSON({'username':username, 'password':password}),
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            success: function() {
+                                document.location.href = getUrlVars()['next'];
                             }
-                        );
+                        });
                     }
                 }
             });
