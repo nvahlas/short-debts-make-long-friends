@@ -62,20 +62,33 @@ class EventParticipantsView(View):
     permissions = ( permissions.IsAuthenticated, )
 
     def get(self, request, **kwargs):
-         event = Event.objects.get(**kwargs)
-         return Response(
+        event = Event.objects.get(**kwargs)
+        return Response(
             status.HTTP_200_OK,
             Participant.objects.filter(event=event)
-         )
+        )
 
 class EventExpenseTypesView(View):
 
     permissions = ( permissions.IsAuthenticated, )
 
     def get(self, request, **kwargs):
-         event = Event.objects.get(**kwargs)
-         return Response(
+        event = Event.objects.get(**kwargs)
+        return Response(
             status.HTTP_200_OK,
             ExpenseType.objects.filter(event=event)
-         )
+        )
+
+class ExpenseAddView(View):
+
+    permissions = ( permissions.IsAuthenticated, )
+
+    def post(self, request, **kwargs):
+        print request, kwargs
+#        Expense()
+#        event = Event.objects.get(**kwargs)
+#        return Response(
+#            status.HTTP_200_OK,
+#            ExpenseType.objects.filter(event=event)
+#        )
 

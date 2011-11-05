@@ -8,6 +8,7 @@ from app.resources import ExpenseTypeResource, WeightResource
 from app.resources import AuthenticationView, ExpenseResource
 from app.views import IndexView, LoginView, EventsView, CalculatorView
 from app.views import BalanceView, EventParticipantsView, EventExpenseTypesView
+from app.views import ExpenseAddView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -36,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^rest/expenses/$',                     ListOrCreateModelView.as_view(resource=ExpenseResource)),
     url(r'^rest/expense/(?P<pk>[0-9]+)/$',       InstanceModelView.as_view(resource=ExpenseResource)),
     url(r'^rest/authenticate$',                  AuthenticationView.as_view()),
+    url(r'^rest/add_expense$',                   ExpenseAddView.as_view()),
     url(r'^rest/calculator$',                    CalculatorView.as_view()),
     url(r'^rest/event/(?P<pk>[0-9+])/participants$', EventParticipantsView.as_view()),
     url(r'^rest/event/(?P<pk>[0-9+])/expense_types$', EventExpenseTypesView.as_view()),
