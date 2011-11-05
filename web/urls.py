@@ -1,10 +1,12 @@
 from django.conf.urls.defaults import patterns, include, url
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
+from django.contrib.auth.decorators import login_required
+from django.contrib import admin
+
 from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource
-from app.views import IndexView
+from app.views import IndexView, LoginView
 
 # Uncomment the next two lines to enable the admin:
-from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -28,5 +30,6 @@ urlpatterns = patterns('',
     url(r'^weights/$',          ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
     url(r'^weight/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=WeightResource)),
     
-    url(r'^$', IndexView.as_view()), 
+    url(r'^$', login_required( IndexView.as_view() )), 
+    url(r'^login$', LoginView.as_view()),
 )

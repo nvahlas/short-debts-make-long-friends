@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Short Debts Make Long Friend: Login</title>
+    <meta content="">
+    <style>
+        label, input { display:block; }
+        input.text { margin-bottom:12px; width:95%; padding: .4em; }
+        fieldset { padding:0; border:0; margin-top:25px; }
+    </style>
+    <script type="text/javascript" src="static/js/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.json-2.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/ui-darkness/jquery-ui-1.8.16.custom.css" />
+    
+    <script type="text/javascript">
+        $(function() {
+            $('#dialog').dialog({
+                draggable: false, 
+                resizable: false, 
+                width: '50%',
+                buttons: {
+                    "Login": function() { 
+                        var username = $('#email').val();
+                        var password = $('#password').val();
+                        
+                        $.post(
+                            '/authenticate',
+                            $.toJSON({'username':username, 'password':password}),
+                            'json',
+                            function() {
+                                alert('done');
+                            }
+                        );
+                    }
+                }
+            });
+            
+        })
+    </script>
+    
+  </head>
+  <body>
+    <div id="dialog" title="Login">
+        <form>
+            <fieldset>
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
+            </fieldset>
+        </form>
+    </div>
+  </body>
+</html>
