@@ -34,7 +34,7 @@ class Calculator(object):
             if all_weights != 0:
                 group_amount = expense.amount * group_weights / all_weights
             
-            total_group_debt += (expense.amount if expense.payer == participant else 0) - group_amount
+            total_group_debt += (expense.amount if expense.payer in participants else 0) - group_amount
             
         return total_group_debt
     

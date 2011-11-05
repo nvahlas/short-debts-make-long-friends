@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.views.generic import TemplateView
 from django.db.models import Q
 
@@ -52,6 +54,7 @@ class CalculatorView(View):
             status.HTTP_200_OK,
             {
                 "event"            : event,
+                "participant"      : participant,
                 "amount"           : calculator.amount(),
                 "participantAmount": calculator.participantAmount(participant)
             }
@@ -81,14 +84,14 @@ class EventExpenseTypesView(View):
 
 class ExpenseAddView(View):
 
-    permissions = ( permissions.IsAuthenticated, )
-
     def post(self, request, **kwargs):
         print request, kwargs
         expense = Expense(
-            expense_type = Expense.objects.get(id=self.CONTENT["expense_type"]["id"]),
+            expense_type = ExpenseType.objects.get(id=self.CONTENT["expense_type"]["id"]),
             amount = self.CONTENT["amount"],
             event = Event.objects.get(id=self.CONTENT["event"]["id"]),
+            payer = Participant.objects.get(id=self.CONTENT["payer"]["id"]),
+            date = datetime.now()
         )
         expense.save()
         expense.participants = [Participant.objects.get(id=participant["id"]) for participant in self.CONTENT["participants"]]

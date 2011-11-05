@@ -1,0 +1,48 @@
+#button { padding: .5em 1em; text-decoration: none; }
+
+.app-dialog { width: 250px; padding: 0.4em; position: absolute; top:0; left:0; margin: 5px; }
+.app-dialog h3 { margin: 0; padding: 0.4em; text-align: center; }
+.app-dialog h3.bottom { bottom: 0 }
+
+#participantAmount {
+    margin-left: 100px;
+    position: absolute;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+#addExpense {
+    position: absolute;
+    right: 5px;
+    margin-top: 29px;
+}
+
+.scroller {
+    display: block;
+    max-height: 4em;
+    overflow-y: auto;
+}
+
+ul.scroller {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul.scroller li {
+    padding-left: 15px;
+}
+
+ul.scroller li input {
+    display: inline;
+}
+
+#expense_detail label {
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#expense button {
+    width: 48%;
+} 
