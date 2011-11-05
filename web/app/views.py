@@ -29,10 +29,12 @@ class CalculatorView(View):
         participant = Participant.objects.get(
             Q(email=request.user.username) | Q(email=request.user.email)
         )
-        calculator = Calculator(participant.event.select_related()[0])
+        event = participant.event.select_related()[0]
+        calculator = Calculator(event)
         return Response(
             status.HTTP_200_OK,
             {
+                "event_name"       : event.name,
                 "amount"           : calculator.amount(),
                 "participantAmount": calculator.participantAmount(participant)
             }
