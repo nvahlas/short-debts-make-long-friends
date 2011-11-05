@@ -8,8 +8,8 @@ class Calculator(object):
         self.event = event
 
     def amount(self):
-        q = Expense.objects.filter(event=self.event).aggregate(Sum('amount'))
-        return q.values()[0]
+        q = Expense.objects.filter(event=self.event).aggregate(Sum('amount')).values()[0]
+        return q if q else 0
         
     def participantAmount(self, participant):
         total_group_debt = 0

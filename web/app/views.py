@@ -26,8 +26,6 @@ class CalculatorView(View):
         participant = Participant.objects.get(
             Q(email=request.user.username) | Q(email=request.user.email)
         )
-        print participant.group
-        print participant.event.select_related()[0]
         calculator = Calculator(participant.event.select_related()[0])
         return Response(
             status.HTTP_200_OK,
