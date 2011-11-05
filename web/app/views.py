@@ -34,7 +34,7 @@ class CalculatorView(View):
         return Response(
             status.HTTP_200_OK,
             {
-                "event_name"       : event.name,
+                "event"            : event,
                 "amount"           : calculator.amount(),
                 "participantAmount": calculator.participantAmount(participant)
             }

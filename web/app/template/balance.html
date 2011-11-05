@@ -15,7 +15,7 @@
             dataType: 'json',
             success: function(data) {
                 console.log(data);
-                $('#title').text(data.event_name);
+                $('#title').text(data.event.name);
                 $('#amount').html(data.amount + ' &euro;');
                 $('#tendancy').append($('<img/>', {src: data.participantAmount >= 0?'/static/img/sun.png':'/static/img/cloud.png'}));
                 $('#participantAmount').html(euros(data.participantAmount) + ' &euro;');
