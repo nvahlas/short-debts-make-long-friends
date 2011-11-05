@@ -20,6 +20,23 @@ class EventsView(TemplateView):
     
 class BalanceView(TemplateView):
     template_name = "balance.html"
+    
+    def __init__(self, *args, **kwargs):
+        TemplateView.__init__(self, *args, **kwargs)
+        self.participant = None
+    
+    def get(self, request):
+        self.participant = Participant.objects.get(
+            Q(email=request.user.username) | Q(email=request.user.email)
+        )
+        return TemplateView.get(self,request)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(BalanceView, self).get_context_data(**kwargs)
+        # Add in the publisher
+        context['participant'] = self.participant
+        return context
 
 class CalculatorView(View):
 
