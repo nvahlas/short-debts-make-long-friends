@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 
 from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource, AuthenticationView
-from app.views import IndexView, LoginView
+from app.views import IndexView, LoginView, EventsView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -19,17 +19,19 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^participants/$',          ListOrCreateModelView.as_view(resource=ParticipantResource), name='model-resource-root'),
-    url(r'^participant/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=ParticipantResource)),
-    url(r'^events/$',          ListOrCreateModelView.as_view(resource=EventResource), name='model-resource-root'),
-    url(r'^event/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=EventResource)),
-    url(r'^groups/$',          ListOrCreateModelView.as_view(resource=GroupResource), name='model-resource-root'),
-    url(r'^group/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=GroupResource)),
-    url(r'^types/$',          ListOrCreateModelView.as_view(resource=ExpenseTypeResource), name='model-resource-root'),
-    url(r'^type/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=ExpenseTypeResource)),
-    url(r'^weights/$',          ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
-    url(r'^weight/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=WeightResource)),
-    url(r'^authenticate$', AuthenticationView.as_view()),
-    url(r'^$', login_required( IndexView.as_view() )), 
-    url(r'^login$', LoginView.as_view()),    
+    
+    url(r'^rest/participants/$',                 ListOrCreateModelView.as_view(resource=ParticipantResource), name='model-resource-root'),
+    url(r'^rest/participant/(?P<pk>[0-9]+)/$',   InstanceModelView.as_view(resource=ParticipantResource)),
+    url(r'^rest/events/$',                       ListOrCreateModelView.as_view(resource=EventResource), name='model-resource-root'),
+    url(r'^rest/event/(?P<pk>[0-9]+)/$',         InstanceModelView.as_view(resource=EventResource)),
+    url(r'^rest/groups/$',                       ListOrCreateModelView.as_view(resource=GroupResource), name='model-resource-root'),
+    url(r'^rest/group/(?P<pk>[0-9]+)/$',         InstanceModelView.as_view(resource=GroupResource)),
+    url(r'^rest/types/$',                        ListOrCreateModelView.as_view(resource=ExpenseTypeResource), name='model-resource-root'),
+    url(r'^rest/type/(?P<pk>[0-9]+)/$',          InstanceModelView.as_view(resource=ExpenseTypeResource)),
+    url(r'^rest/weights/$',                      ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
+    url(r'^rest/weight/(?P<pk>[0-9]+)/$',        InstanceModelView.as_view(resource=WeightResource)),
+    url(r'^rest/authenticate$',                  AuthenticationView.as_view()),
+    url(r'^$',                                   login_required( IndexView.as_view() )),
+    url(r'^login$',                              LoginView.as_view()),
+    url(r'^events$',                             login_required( EventsView.as_view() )),
 )

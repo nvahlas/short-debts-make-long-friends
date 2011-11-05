@@ -1,23 +1,14 @@
-<html>
-  <head>
-    <title>Short Debts Make Long Friends</title>
-    <meta content="">
-    <style></style>
-    <script type="text/javascript" src="static/js/jquery-1.7.min.js"></script>
-    <script type="text/javascript" src="static/js/jquery-ui-1.8.16.custom.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/ui-darkness/jquery-ui-1.8.16.custom.css" />
-    
-    <script type="text/javascript">
-        $(function() {
-            $('#dialog').dialog({draggable: false, resizable: false, width: '50%', height: 200});
-            
-        })
-    </script>
-    
-  </head>
-  <body><h1>It Works!</h1>
-    <div id="dialog" title="Short Debts Make Long Friends">
-        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-    </div>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block js %}    
+<script type="text/javascript">
+    $(function() {
+        $('#dialog').dialog({draggable: false, resizable: false, width: '50%', height: 200});
+    })
+</script>
+{% endblock %}
+{% block body %}
+<div id="dialog" title="Short Debts Make Long Friends">
+    <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+{% endblock %}
