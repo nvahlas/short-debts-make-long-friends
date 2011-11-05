@@ -2,36 +2,115 @@
 {% block title %}Balance{% endblock %}
 {% block js %} 
 <script type="text/javascript">
+    var eventId,participantId;
+
+    participantId = {{ participant.id }};
+    
     function euros(amount) {
         return new Number(Math.round(amount*100)/100);
     }
-
-
-    $(function() {
+    
+    function addExpense(event) {
+        $('#balance').fadeOut();
+        $('#expense').fadeIn();
+        
+        $.ajax({
+            url: '/rest/event/'+eventId+'/expense_types',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                $('#expense_type option').remove();
+                $(data).each(function(idx, item) {
+                    $('#expense_type').append(
+                        $('<option/>', {'value': item.id}).text(item.name)
+                    )
+                });
+                
+            }
+        })
+        
+        $.ajax({
+            url: '/rest/event/'+eventId+'/participants',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                $('#expense_detail ul li').remove();
+                $(data).each(function(idx, item) {
+                    $('#expense_detail ul').append(
+                        $('<li/>', {'id': item.id})
+                            .html('<input type="checkbox" id="'+item.id+'" checked="checked" />' + item.first_name + ' ' + item.last_name)
+                    )
+                });
+                
+            }
+        })
+    }
+    
+    function sendExpense(event) {
+        var participants = new Array();
+        $('#expense_detail ul li input').each(function(idx, checkbox) {
+            if ( $(checkbox).is(':checked') )
+                participants.push({'id': $(checkbox).attr('id') });
+        });
+        
+        $.ajax({
+            url: '/rest/expense',
+            type: 'PUT',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: $.toJSON({
+                'expense_type': {'id': $('#expense_type').val()},
+                'event':        {'id': eventId},
+                'amount':       euros($('#expense_amount').val()),
+                'payer':        {'id': participantId},
+                'participants': participants
+            }),
+            success: function() {
+                back();
+            }
+        })
+    }
+    
+    function back(event) {
+        $('#balance').fadeIn();
+        $('#expense').fadeOut();
+    }
+    
+    function load() {
         $.ajax({
             url: '/rest/calculator',
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
+                eventId = data.event.id;
                 $('#title').text(data.event.name);
                 $('#amount').html(data.amount + ' &euro;');
-                $('#tendancy').append($('<img/>', {src: data.participantAmount >= 0?'/static/img/sun.png':'/static/img/cloud.png'}));
+                $('#tendancy-img').attr( 'src', data.participantAmount >= 0?'/static/img/sun.png':'/static/img/cloud.png' );
                 $('#participantAmount').html(euros(data.participantAmount) + ' &euro;');
             }
         })
         
+        setTimeout(load, 2000);
+    }
+
+    $(function() {
+        $('#addExpense').button().click(addExpense);
+        $('#back').button().click(back);
+        $('#sendExpense').button().click(sendExpense);
+        load();
     })
 </script>
 {% endblock %}
 {% block css %} 
 <style>
-        .toggler { width: 500px; position: relative; }
         #button { padding: .5em 1em; text-decoration: none; }
-        #balance { width: 240px; padding: 0.4em; position: relative; }
-        #balance h3 { margin: 0; padding: 0.4em; text-align: center; }
-        #balance h3.bottom { bottom: 0 }
+        
+        .app-dialog { width: 250px; padding: 0.4em; position: absolute; top:0; left:0; margin: 5px; }
+        .app-dialog h3 { margin: 0; padding: 0.4em; text-align: center; }
+        .app-dialog h3.bottom { bottom: 0 }
         
         #participantAmount {
             margin-left: 100px;
@@ -39,16 +118,73 @@
             margin-top: 50px;
             font-weight: bold;
         }
+        
+        #addExpense {
+            position: absolute;
+            right: 5px;
+            margin-top: 29px;
+        }
+        
+        .scroller {
+            display: block;
+            max-height: 4em;
+            overflow-y: auto;
+        }
+        
+        ul.scroller {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        ul.scroller li {
+            padding-left: 15px;
+        }
+        
+        ul.scroller li input {
+            display: inline;
+        }
+        
+        #expense_detail label {
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        
+        #expense button {
+            width: 49%;
+        }
 </style>
 {% endblock %}
 {% block body %}
-<div class="toggler">
-    <div id="balance" class="ui-widget-content ui-corner-all">
-        <h3 id="title" class="ui-widget-header ui-corner-all"></h3>
-        <div id="tendancy">
-            <div id="participantAmount"></div>
-        </div>
-        <h3 id="amount" class="ui-widget-header ui-corner-all bottom"></h3>
+<div id="balance" class="ui-widget-content ui-corner-all app-dialog">
+    <h3 id="title" class="ui-widget-header ui-corner-all"></h3>
+    <div id="tendancy">
+        <div id="participantAmount"></div>
+        <button id="addExpense">+</button>
+        <img id="tendancy-img" src="" />
     </div>
+    <h3 id="amount" class="ui-widget-header ui-corner-all bottom"></h3>
+</div>
+
+<div id="expense" class="ui-widget-content ui-corner-all app-dialog" style="display:none">
+    <h3 id="title" class="ui-widget-header ui-corner-all">Add Expense</h3>
+    <div id="expense_detail">
+        <fieldset>
+            <label for="expense_type">Expense Type :</label>
+            <select id="expense_type"></select>
+            
+            <label for="participants">Participants :</label>
+            <ul class="scroller">
+            </ul>
+            
+            <label for="expense_amount">Amount :</label>
+            <input type="text" id="expense_amount" name="expense_amount" />
+            
+            <br/>
+        </fieldset> 
+    </div>
+    <button id="sendExpense">OK</button>
+    <button id="back">Back</button>
 </div>
 {% endblock %}
