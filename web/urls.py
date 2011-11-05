@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 
 from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource, AuthenticationView
-from app.views import IndexView, LoginView, EventsView
+from app.views import IndexView, LoginView, EventsView, CalculatorView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^rest/weights/$',                      ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
     url(r'^rest/weight/(?P<pk>[0-9]+)/$',        InstanceModelView.as_view(resource=WeightResource)),
     url(r'^rest/authenticate$',                  AuthenticationView.as_view()),
+    url(r'^rest/calculator$',                    CalculatorView.as_view()),
     url(r'^$',                                   login_required( IndexView.as_view() )),
     url(r'^login$',                              LoginView.as_view()),
     url(r'^events$',                             login_required( EventsView.as_view() )),

@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login
-from django.http import HttpRequest
 
 from djangorestframework.views import View
 from djangorestframework.resources import ModelResource
@@ -45,3 +44,4 @@ class AuthenticationView(View):
         else:
             login(request, user)
             return Response(status.HTTP_200_OK)
+

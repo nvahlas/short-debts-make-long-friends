@@ -13,8 +13,10 @@ class Group(models.Model):
 class Participant(models.Model):
     first_name = models.CharField(max_length=200)
     last_name  = models.CharField(max_length=200)
+    email      = models.EmailField()
     group      = models.ForeignKey(Group)
     join_date  = models.DateTimeField('joining date')
+    event      = models.ManyToManyField(Event)
 
 class ExpenseType(models.Model):
     name         = models.CharField(max_length=200)
