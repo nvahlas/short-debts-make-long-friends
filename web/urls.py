@@ -3,8 +3,11 @@ from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 
-from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource, AuthenticationView
-from app.views import IndexView, LoginView, EventsView, CalculatorView, BalanceView, EventParticipantsView, EventExpenseTypesView
+from app.resources import ParticipantResource, EventResource, GroupResource
+from app.resources import ExpenseTypeResource, WeightResource
+from app.resources import AuthenticationView, ExpenseResource
+from app.views import IndexView, LoginView, EventsView, CalculatorView
+from app.views import BalanceView, EventParticipantsView, EventExpenseTypesView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -30,6 +33,8 @@ urlpatterns = patterns('',
     url(r'^rest/type/(?P<pk>[0-9]+)/$',          InstanceModelView.as_view(resource=ExpenseTypeResource)),
     url(r'^rest/weights/$',                      ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
     url(r'^rest/weight/(?P<pk>[0-9]+)/$',        InstanceModelView.as_view(resource=WeightResource)),
+    url(r'^rest/expenses/$',                     ListOrCreateModelView.as_view(resource=ExpenseResource)),
+    url(r'^rest/expense/(?P<pk>[0-9]+)/$',       InstanceModelView.as_view(resource=ExpenseResource)),
     url(r'^rest/authenticate$',                  AuthenticationView.as_view()),
     url(r'^rest/calculator$',                    CalculatorView.as_view()),
     url(r'^rest/event/(?P<pk>[0-9+])/participants$', EventParticipantsView.as_view()),

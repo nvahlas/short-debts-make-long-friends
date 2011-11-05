@@ -41,6 +41,7 @@ class Expense(models.Model):
     amount       = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(0)])
     payer        = models.ForeignKey(Participant, related_name="expense_payer")
     participants = models.ManyToManyField(Participant, db_table="expense_participants")
+    date         = models.DateTimeField()
 
     def __unicode__(self):
         return u'<Expense of %s>' % (self.amount)

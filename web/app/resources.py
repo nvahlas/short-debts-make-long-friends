@@ -5,7 +5,7 @@ from djangorestframework.resources import ModelResource
 from djangorestframework.response import Response
 from djangorestframework import status
 
-from app.models import Participant, Group, Event, ExpenseType, Weight
+from app.models import Participant, Group, Event, ExpenseType, Weight, Expense
 from app.forms import AuthenticationForm
 
 class ParticipantResource(ModelResource):
@@ -32,6 +32,11 @@ class WeightResource(ModelResource):
     model = Weight
     fields = ('expense_type', 'participant', 'weight', 'url')
     ordering = ('participant')
+
+class ExpenseResource(ModelResource):
+    model = Expense
+    fields = ('expense_type', 'event', 'amount', 'payer', 'participants', 'date')
+    ordering = ('date')
 
 class AuthenticationView(View):
     
