@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from app.resources import ParticipantResource, EventResource, GroupResource, ExpenseTypeResource, WeightResource
+from app.views import IndexView
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -25,4 +27,6 @@ urlpatterns = patterns('',
     url(r'^type/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=ExpenseTypeResource)),
     url(r'^weights/$',          ListOrCreateModelView.as_view(resource=WeightResource), name='model-resource-root'),
     url(r'^weight/(?P<pk>[0-9]+)/$', InstanceModelView.as_view(resource=WeightResource)),
+    
+    url(r'^$', IndexView.as_view()), 
 )
