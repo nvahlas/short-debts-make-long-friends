@@ -1,16 +1,13 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+from django.utils import unittest
+from app.models import Event, Expense
+from app.calculator import Calculator
 
-Replace this with more appropriate tests for your application.
-"""
+#To Run: python manage.py test app.CalculatorTest
 
-from django.test import TestCase
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class CalculatorTest(unittest.TestCase):
+    def setUp(self):
+        self.event = Event(pk=1)
+        self.calculator = Calculator(self.event)
+    
+    def testAmount(self):
+        self.assertEqual(self.calculator.amount(), 100)
