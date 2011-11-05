@@ -7,7 +7,7 @@ from djangorestframework import status
 from djangorestframework import permissions
 
 from app.calculator import Calculator
-from app.models import Participant, Event, ExpenseType
+from app.models import Participant, Event, ExpenseType, Expense
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -85,10 +85,12 @@ class ExpenseAddView(View):
 
     def post(self, request, **kwargs):
         print request, kwargs
-#        Expense()
-#        event = Event.objects.get(**kwargs)
-#        return Response(
-#            status.HTTP_200_OK,
-#            ExpenseType.objects.filter(event=event)
-#        )
+        expense = Expense(
+            expense_type = Expense.objects.get(id=self.CONTENT["expense_type"]["id"]),
+            amount = self.CONTENT["amount"],
+            event = Event.objects.get(id=self.CONTENT["event"]["id"]),
+        )
+        expense.save()
+        expense.participants = [Participant.objects.get(id=participant["id"]) for participant in self.CONTENT["participants"]]
+        expense.save()
 
