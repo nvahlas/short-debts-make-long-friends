@@ -24,18 +24,18 @@ class ExpenseType(models.Model):
 class Expense(models.Model):
     expense_type = models.ForeignKey(ExpenseType)
     event        = models.ForeignKey(Event)
-    amount       = models.DecimalField(decimal_places=2, validators=[MinValueValidator(0)])
-    payer        = models.ForeignKey(Participant)
-    participants = models.ManyToManyField(Participant)
+    amount       = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(0)])
+    payer        = models.ForeignKey(Participant, related_name="expense_payer")
+    participants = models.ManyToManyField(Participant, db_table="expense_participants")
 
 
 class Refund(models.Model):
-    amount      = models.DecimalField(decimal_places=2, validators=[MinValueValidator(0)])
-    source      = models.ForeignKey(Participant)
-    destination = models.ForeignKey(Participant)
+    amount      = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(0)])
+    source      = models.ForeignKey(Participant, related_name="refund_source")
+    destination = models.ForeignKey(Participant, related_name="refund_destination")
 
 class Weight(models.Model):
     expense_type = models.ForeignKey(ExpenseType)
     participant  = models.ForeignKey(Participant)
-    weight       = models.DecimalField(decimal_places=2, validators=[MinValueValidator(0)])
+    weight       = models.DecimalField(decimal_places=2, max_digits=10, validators=[MinValueValidator(0)])
 
