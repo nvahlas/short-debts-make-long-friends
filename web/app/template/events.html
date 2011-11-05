@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block js %} 
+<script type="text/javascript">
+    $(function() {
+       
+        $.ajax({
+            url: '/rest/events',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                $(data).each(function(idx, item) {
+                    $('#events').append(
+                        $('<tr></tr>', {id: idx, url: item.url, 'class':'ui-widget-content'})
+                            .append(
+                                $('<td></td>').text(item.name)
+                            )
+                            .append(
+                                $('<td></td>').text(item.start_date)
+                            )
+                            .append(
+                                $('<td></td>').text(item.end_date)
+                            )
+                            .append(
+                                $('<td></td>').append( 
+                                    $('<button></button>')
+                                        .button({text:false, icons: {'primary':'ui-icon-gear'}})
+                                        .click(editHanlder), 
+                                    $('<button></button>')
+                                        .button({text:false, icons: {'primary':'ui-icon-trash'}}) 
+                                        .click(deleteHandler)
+                                )   
+                            )
+                    );
+                });
+            }
+        })
+    })
+    
+    function editHanlder(event) {
+       console.log(event);
+    }
+    
+    function deleteHandler(event) {
+       var tr = $(event.currentTarget).parent().parent();
+       $.ajax({
+           url: tr.attr('url'),
+           type: 'DELETE',
+           contentType: 'application/json',
+           dataType: 'json',
+           success: function(data) {
+               tr.remove();
+           }
+       });
+    }
+</script>
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    #selectable .ui-selecting { background: #FECA40; }
+    #selectable .ui-selected { background: #F39814; color: white; }
+    #selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+    #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+</style>
+{% endblock %}
+
+{% block body %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="events">
+    </tbody>
+</table>
+{% endblock %}
