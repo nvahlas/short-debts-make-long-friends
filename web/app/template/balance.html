@@ -2,27 +2,53 @@
 {% block title %}Balance{% endblock %}
 {% block js %} 
 <script type="text/javascript">
+    function euros(amount) {
+        return new Number(Math.round(amount*100)/100);
+    }
+
+
     $(function() {
-        
+        $.ajax({
+            url: '/rest/calculator',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                $('#title').text(data.event_name);
+                $('#amount').html(data.amount + ' &euro;');
+                $('#tendancy').append($('<img/>', {src: data.participantAmount >= 0?'/static/img/sun.png':'/static/img/cloud.png'}));
+                $('#participantAmount').html(euros(data.participantAmount) + ' &euro;');
+            }
+        })
         
     })
 </script>
 {% endblock %}
 {% block css %} 
 <style>
-        .toggler { width: 500px; height: 700px; position: relative; }
+        .toggler { width: 500px; position: relative; }
         #button { padding: .5em 1em; text-decoration: none; }
-        #effect { width: 240px; height: 500px; padding: 0.4em; position: relative; background: #fff; }
-        #effect h3 { margin: 0; padding: 0.4em; text-align: center; }
+        #balance { width: 240px; padding: 0.4em; position: relative; }
+        #balance h3 { margin: 0; padding: 0.4em; text-align: center; }
+        #balance h3.bottom { bottom: 0 }
+        
+        #participantAmount {
+            margin-left: 100px;
+            position: absolute;
+            margin-top: 50px;
+            font-weight: bold;
+        }
 </style>
 {% endblock %}
 {% block body %}
 <div class="toggler">
-    <div id="effect" class="ui-widget-content ui-corner-all">
-        <h3 class="ui-widget-header ui-corner-all">Balance</h3>
-        <p>
-            Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
-        </p>
+    <div id="balance" class="ui-widget-content ui-corner-all">
+        <h3 id="title" class="ui-widget-header ui-corner-all"></h3>
+        <div id="tendancy">
+            <div id="participantAmount"></div>
+        </div>
+        <h3 id="amount" class="ui-widget-header ui-corner-all bottom"></h3>
     </div>
 </div>
 {% endblock %}
