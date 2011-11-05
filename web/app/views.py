@@ -7,7 +7,7 @@ from djangorestframework import status
 from djangorestframework import permissions
 
 from app.calculator import Calculator
-from app.models import Participant
+from app.models import Participant, Event, ExpenseType
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -39,4 +39,26 @@ class CalculatorView(View):
                 "participantAmount": calculator.participantAmount(participant)
             }
         )
+
+class EventParticipantsView(View):
+
+    permissions = ( permissions.IsAuthenticated, )
+
+    def get(self, request, **kwargs):
+         event = Event.objects.get(**kwargs)
+         return Response(
+            status.HTTP_200_OK,
+            Participant.objects.filter(event=event)
+         )
+
+class EventExpenseTypesView(View):
+
+    permissions = ( permissions.IsAuthenticated, )
+
+    def get(self, request, **kwargs):
+         event = Event.objects.get(**kwargs)
+         return Response(
+            status.HTTP_200_OK,
+            ExpenseType.objects.filter(event=event)
+         )
 
