@@ -12,10 +12,13 @@ class Calculator(object):
         return q if q else 0
         
     def participantAmount(self, participant):
+        return self.groupAmount(participant.group)
+    
+    def groupAmount(self, group):
         total_group_debt = 0
         
         # participants belonging to the same group
-        participants = Participant.objects.filter(group=participant.group)
+        participants = Participant.objects.filter(group=group)
         
         # event expenses
         event_expenses = Expense.objects.filter(event=self.event)
@@ -39,4 +42,8 @@ class Calculator(object):
         return total_group_debt
     
     def participantBalance(self, participant):
+        
+        #Event's groups
+        
+        
         return None

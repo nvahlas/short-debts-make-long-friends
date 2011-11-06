@@ -6,6 +6,8 @@ group_a = Group(name="Family A")
 group_a.save()
 group_b = Group(name="Family B")
 group_b.save()
+group_c = Group(name="Family C")
+group_c.save()
 
 event = Event(name="Holidays in Greece", start_date=datetime.now(), end_date=datetime.now())
 event.save()
@@ -24,7 +26,7 @@ participant_a.save()
 participant_b = Participant(
     first_name ="Jack",
     last_name  = "B",
-    email      = "Jack@b.com",
+    email      = "jack@b.com",
     join_date  = datetime.now(),
     group      = group_b
 )
@@ -32,14 +34,25 @@ participant_b.save()
 participant_b.event = [event]
 participant_b.save()
 
+participant_c = Participant(
+    first_name ="Chris",
+    last_name  = "C",
+    email      = "chris@c.com",
+    join_date  = datetime.now(),
+    group      = group_b
+)
+participant_c.save()
+participant_c.event = [event]
+participant_c.save()
+
 expense_type_food = ExpenseType(
-    name  = "food",
+    name  = "Food Expenses",
     event = event
 )
 expense_type_food.save()
 
 expense_type_hotel = ExpenseType(
-    name  = "hotel",
+    name  = "Hotel Expenses",
     event = event
 )
 expense_type_hotel.save()
@@ -58,10 +71,17 @@ weight_b_food = Weight(
 )
 weight_b_food.save()
 
+weight_c_food = Weight(
+    expense_type = expense_type_food,
+    participant  = participant_c,
+    weight       = 1.0
+)
+weight_c_food.save()
+
 weight_a_hotel = Weight(
     expense_type = expense_type_hotel,
     participant  = participant_a,
-    weight       = 1.0
+    weight       = 2.0
 )
 weight_a_hotel.save()
 
@@ -71,6 +91,13 @@ weight_b_hotel = Weight(
     weight       = 3.0
 )
 weight_b_hotel.save()
+
+weight_c_hotel = Weight(
+    expense_type = expense_type_hotel,
+    participant  = participant_c,
+    weight       = 3.0
+)
+weight_c_hotel.save()
 
 expense_john_food = Expense(
     event        = event,
